@@ -1,4 +1,11 @@
-import {Component} from 'react';
+import {
+  Component,
+  useState
+} from 'react';
+
+import {
+  Navigate
+} from 'react-router-dom';
 
 import {
   Box,
@@ -10,8 +17,11 @@ import {
   IconButton,
   Image,
   Show,
-  Text
+  Text,
+  useDisclosure
 } from '@chakra-ui/react';
+
+import {useAuth} from '../providers/UserProvider';
 
 import {
   FaBars
@@ -20,57 +30,48 @@ import {
 import AdminNav from './nav/AdminNav';
 import AdminDrawer from './nav/AdminDrawer';
 
-class AdminDashboard extends Component {
+export default function AdminDashboard(props) {
+  const auth = useAuth();
+  const drawer = useDisclosure();
 
-  constructor(props) {
-    super(props);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-    this.state = {
-      isDrawerOpened: false
-    };
+  const handleMessage = (message) => {
+    if (message === 'logout') {
+      if (window.confirm('Apakah anda yakin untuk keluar?')) {
+        auth.logout();
+        setIsLoggingOut(true);
+      }
+    }
+  };
 
-    this.onDrawerOpen = this.onDrawerOpen.bind(this);
-    this.onDrawerClose = this.onDrawerClose.bind(this);
+  if (isLoggingOut) {
+    return (<Navigate to="/admin/login" />);
   }
 
-  render() {
-    return (
-      <Flex direction="column" bg="green.50" minH="100vh" p={{base: 4, lg: 8}}>
-        <Flex direction="row" justify="space-between" align="center">
-          <HStack spacing={4}>
-            <Image src="/assets/rida/img/uns.png" boxSize={{base: '48px', lg: '64px'}} />
-            <Heading size="lg">RIDA</Heading>
-          </HStack>
-          <Show above="lg">
-            <Text as="b" color="gray.500">Halo, Admin!</Text>
-          </Show>
-          <Hide above="lg">
-            <IconButton icon={<Icon as={FaBars} />} onClick={this.onDrawerOpen} />
-          </Hide>
-        </Flex>
-        <Flex flex={1} direction="row" pt={{base: 4, lg: 8}}>
-          <Show above="lg">
-            <Box w="200px" mr={8}>
-              <AdminNav />
-            </Box>
-          </Show>
-          <AdminDrawer isOpen={this.state.isDrawerOpened} onClose={this.onDrawerClose} />
-          <Box flex={1} bg="white" p={{base: 4, lg: 8}} borderRadius="2xl">
-            {this.props.children}
-          </Box>
-        </Flex>
+  return (
+    <Flex direction="column" bg="green.50" minH="100vh" p={{base: 4, lg: 8}}>
+      <Flex direction="row" justify="space-between" align="center">
+        <HStack spacing={4}>
+          <Image src="/assets/rida/img/uns.png" boxSize={{base: '48px', lg: '64px'}} />
+          <Heading size="lg">RIDA</Heading>
+        </HStack>
+        <Show above="lg">
+          <Text as="b" color="gray.500">Halo, Admin!</Text>
+        </Show>
+        <Hide above="lg">
+          <IconButton icon={<Icon as={FaBars} />} onClick={drawer.onOpen} />
+        </Hide>
       </Flex>
-    );
-  }
-
-  onDrawerOpen() {
-    this.setState({isDrawerOpened: true});
-  }
-
-  onDrawerClose() {
-    this.setState({isDrawerOpened: false});
-  }
-
+      <Flex flex={1} direction="row" pt={{base: 4, lg: 8}} gap={8}>
+        <AdminDrawer isOpen={drawer.isOpen} onClose={drawer.onClose} onMessage={handleMessage} />
+        <Show above="lg" flex={1} w="25%">
+          <AdminNav onMessage={handleMessage} />
+        </Show>
+        <Box flex={1} bg="white" w={{base: '100%', lg: '75%'}} p={{base: 4, lg: 8}} borderRadius="2xl">
+          {props.children}
+        </Box>
+      </Flex>
+    </Flex>
+  );
 }
-
-export default AdminDashboard;

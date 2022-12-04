@@ -13,6 +13,14 @@ import {
 
 const RouteContext = createContext();
 
+function useRouter() {
+  return {
+    location: useLocation(),
+    navigate: useNavigate(),
+    params: useParams()
+  };
+}
+
 function RouteProvider(props) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -32,9 +40,19 @@ function RouteProvider(props) {
   );
 }
 
+function withRouteContext(Component) {
+  return props => (
+    <RouteContext.Consumer>
+      {routeContext => (<Component {...props} routeContext={routeContext} />)}
+    </RouteContext.Consumer>
+  );
+}
+
 export {
   RouteContext,
-  RouteProvider
+  RouteProvider,
+  withRouteContext,
+  useRouter
 };
 
 export default RouteProvider;

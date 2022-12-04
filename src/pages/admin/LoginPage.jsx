@@ -2,7 +2,8 @@ import axios from '../../utils/axios';
 
 import {
   Component,
-  createRef
+  useRef,
+  useState
 } from 'react';
 
 import {
@@ -15,60 +16,51 @@ import {
   FormLabel,
   Heading,
   Input,
-  VStack,
+  VStack
 } from '@chakra-ui/react';
+
+import {useAuth} from '../../providers/UserProvider';
 
 import AdminDashboard from '../../components/AdminDashboard';
 
-class LoginPage extends Component {
+export default function LoginPage() {
+  const auth = useAuth();
 
-  constructor(props) {
-    super(props);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    this.state = {
-      isLoggedIn: false
-    };
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
-    this.emailRef = createRef();
-    this.passwordRef = createRef();
-
-    this.onLogin = this.onLogin.bind(this);
-  }
-
-  render() {
-    if (this.state.isLoggedIn) {
-      return (<Navigate to="/admin" />);
-    }
-
-    return (
-      <AdminDashboard>
-        <VStack spacing={8} align="start" w="100%" maxW="lg">
-          <Heading>Login</Heading>
-          <FormControl>
-            <FormLabel>E-mail</FormLabel>
-            <Input ref={this.emailRef} type="email" placeholder="someone@example.com" />
-          </FormControl>
-          <FormControl>
-            <FormLabel>Password</FormLabel>
-            <Input ref={this.passwordRef} type="password" />
-          </FormControl>
-          <Button onClick={this.onLogin}>Login</Button>
-        </VStack>
-      </AdminDashboard>
-    );
-  }
-
-  onLogin() {
-    const email = this.emailRef.current.value;
-    const password = this.passwordRef.current.value;
+  const handleLogin = () => {
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
 
     axios.post('/admin/login', {email, password}).then((response) => {
       localStorage.setItem('AUTH_ID', response.data.id);
+      localStorage.setItem('AUTH_ROLE', response.data.role);
       localStorage.setItem('AUTH_TOKEN', response.data.token);
-      this.setState({isLoggedIn: true});
+      setIsLoggedIn(true);
     });
+  };
+
+  if (auth.check() || isLoggedIn) {
+    return (<Navigate to="/admin/account" />);
   }
 
+  return (
+    <AdminDashboard>
+      <VStack spacing={8} align="start" w="100%" maxW="lg">
+        <Heading>Login</Heading>
+        <FormControl>
+          <FormLabel>E-mail</FormLabel>
+          <Input ref={emailRef} type="email" placeholder="someone@example.com" />
+        </FormControl>
+        <FormControl>
+          <FormLabel>Password</FormLabel>
+          <Input ref={passwordRef} type="password" />
+        </FormControl>
+        <Button onClick={handleLogin}>Login</Button>
+      </VStack>
+    </AdminDashboard>
+  );
 }
-
-export default LoginPage;

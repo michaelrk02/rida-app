@@ -1,42 +1,62 @@
-import {Component} from 'react'
+import {
+  Component,
+  useEffect,
+  useState
+} from 'react'
 
 import {
   Navigate
 } from 'react-router-dom';
 
-import {UserContext} from '../../providers/UserProvider';
+import {useAuth} from '../../providers/UserProvider';
+
+import axios from '../../utils/axios';
 
 import {
-  Text
+  Heading,
+  Text,
+  VStack
 } from '@chakra-ui/react';
 
-import DataSource from '../../components/DataSource';
+import AdminDashboard from '../../components/AdminDashboard';
 
-class ProfilePage extends Component {
+export default function ProfilePage() {
+  const auth = useAuth();
 
-  render() {
-    return (
-        <UserContext.Consumer>
-          {
-            user => !user.check() ?
-            (<Navigate to="/admin/login" />) :
-            (
-              <DataSource
-                endpoint="/peneliti"
-                columns={[
-                  {id: 'nidn', title: 'NIDN', sort: 'peneliti.nidn'},
-                  {id: 'nama', title: 'Nama', sort: 'peneliti.nama'},
-                  {id: 'jenis_kelamin', title: 'Jenis Kelamin', sort: false},
-                  {id: 'fakultas_nama', title: 'Fakultas', sort: 'Fakultas.nama'},
-                  {id: 'diciptakan_oleh_nama', title: 'Diciptakan Oleh', sort: 'DiciptakanOleh.nama'}
-                ]}
-              />
-            )
-          }
-        </UserContext.Consumer>
-    );
+  const [nama, setNama] = useState('');
+  const [email, setEmail] = useState('');
+  const [fakultas, setFakultas] = useState(null);
+
+  useEffect(() => {
+    if (auth.check()) {
+      axios.get('/admin/' + auth.id).then(res => {
+        setNama(res.data.nama);
+        setEmail(res.data.email);
+        setFakultas(res.data.fakultas_nama);
+      });
+    }
+  }, []);
+
+  if (!auth.check()) {
+    return (<Navigate to="/admin/login" />);
   }
 
+  return (
+    <AdminDashboard>
+      <VStack spacing={8} align="start">
+        <Heading size="2xl">Profil</Heading>
+        <VStack spacing={2} align="start">
+          <Text>Nama: {nama}</Text>
+          <Text>E-mail: {email}</Text>
+          <Text>Status: {fakultas === null ? 'Superadmin' : 'Admin Fakultas'}</Text>
+        </VStack>
+        {
+          (fakultas !== null) &&
+          <VStack spacing={2} align="start">
+            <Text>Fakultas yang ditangani: {fakultas}</Text>
+          </VStack>
+        }
+      </VStack>
+    </AdminDashboard>
+  );
 }
-
-export default ProfilePage;

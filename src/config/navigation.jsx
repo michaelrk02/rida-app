@@ -26,8 +26,7 @@ const navigationConfig = {
   ],
   admin: [
     {
-      type: 'separator',
-      permissions: ['guest', 'admin', 'superadmin']
+      type: 'separator'
     },
     {
       type: 'link',
@@ -58,12 +57,11 @@ const navigationConfig = {
       type: 'link',
       path: '/',
       title: 'View Site',
-      icon: <Icon as={FaEye} />,
-      permissions: ['guest', 'admin', 'superadmin']
+      icon: <Icon as={FaEye} />
     },
     {
       type: 'button',
-      message: 'logoutClicked',
+      message: 'logout',
       title: 'Log Out',
       icon: <Icon as={FaSignOutAlt} />,
       permissions: ['admin', 'superadmin']

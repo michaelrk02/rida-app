@@ -59,7 +59,7 @@ export default function LoginPage() {
           <FormLabel>Password</FormLabel>
           <Input ref={passwordRef} type="password" />
         </FormControl>
-        <Button onClick={handleLogin}>Login</Button>
+        <Button onClick={handleLogin} colorScheme="teal">Login</Button>
       </VStack>
     </AdminDashboard>
   );

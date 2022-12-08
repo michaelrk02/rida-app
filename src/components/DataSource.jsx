@@ -60,12 +60,7 @@ export default function DataSource(props) {
 
   useEffect(() => {
     populate();
-  }, [props.populate]);
-
-  useEffect(() => {
-    setIsPopulating(true);
-    populate();
-  }, [display, page, search, sortMode, sortColumn]);
+  }, [display, page, search, sortMode, sortColumn, props.populate]);
 
   const handleSearchInputChange = () => {
     setIsPopulating(true);
@@ -113,6 +108,8 @@ export default function DataSource(props) {
   };
 
   const populate = () => {
+    setIsPopulating(true);
+
     const urlParams = [];
 
     const assign = (state, param) => {

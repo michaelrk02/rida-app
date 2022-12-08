@@ -1,10 +1,10 @@
 import {app} from '../providers/AppProvider';
 
-import HomePage from '../pages/home/HomePage';
+import HIndexPage from '../pages/h-index/HIndexPage';
 
 const hIndexRoutes = {
   path: 'h-index',
-  element: app(<HomePage />)
+  element: app(<HIndexPage />)
 };
 
 export default hIndexRoutes;

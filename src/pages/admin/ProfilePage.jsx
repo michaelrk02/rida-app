@@ -10,9 +10,14 @@ import {
 
 import {useAuth} from '../../providers/UserProvider';
 
+import {
+  Link as RouterLink
+} from 'react-router-dom';
+
 import axios from '../../utils/axios';
 
 import {
+  Button,
   Heading,
   Text,
   VStack
@@ -56,6 +61,9 @@ export default function ProfilePage() {
             <Text>Fakultas yang ditangani: {fakultas}</Text>
           </VStack>
         }
+        <VStack spacing={2} align="start">
+          <Button as={RouterLink} to="/admin/account/password" colorScheme="teal">Ganti Password</Button>
+        </VStack>
       </VStack>
     </AdminDashboard>
   );

@@ -183,7 +183,7 @@ export default function DataSource(props) {
               <Tbody>
                 {(data !== null) && data.data.map(row => (
                   <Tr>
-                    {props.columns.map(column => (<Td>{row[column.id]}</Td>))}
+                    {props.columns.map(column => (<Td>{typeof(column.render) === 'function' ? column.render(row[column.id], row) : row[column.id]}</Td>))}
                     {(actions !== null) && (<Td>{actions(row)}</Td>)}
                   </Tr>
                 ))}

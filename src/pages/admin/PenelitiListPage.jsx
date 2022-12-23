@@ -17,11 +17,13 @@ import {
   Heading,
   HStack,
   Icon,
-  IconButton
+  IconButton,
+  Text
 } from '@chakra-ui/react';
 
 import {
   FaEdit,
+  FaLink,
   FaTrash
 } from 'react-icons/fa';
 
@@ -72,8 +74,14 @@ export default function PenelitiListPage() {
           columns={[
             {id: 'nidn', title: 'NIDN', sort: 'peneliti.nidn'},
             {id: 'nama', title: 'Nama', sort: 'peneliti.nama'},
-            {id: 'jenis_kelamin', title: 'Jenis Kelamin', sort: false},
+            {id: 'jenis_kelamin', title: 'Jenis Kelamin', sort: 'false'},
             {id: 'fakultas_nama', title: 'Fakultas', sort: 'Fakultas.nama'},
+            {id: 'h_index', title: 'H-Index', sort: 'peneliti.h_index', render: (value, row) => (
+              <HStack>
+                <Text>{row.h_index}</Text>
+                {row.is_remote && (<Icon as={FaLink} color="teal" />)}
+              </HStack>
+            )},
             {id: 'diciptakan_oleh_nama', title: 'Diciptakan Oleh', sort: 'DiciptakanOleh.nama'}
           ]}
           actions={(data) => (

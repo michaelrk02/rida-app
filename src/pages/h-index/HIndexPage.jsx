@@ -135,9 +135,9 @@ export default function HIndexPage() {
                     <TableCaption>Tabel H-Index Peneliti</TableCaption>
                     <Thead>
                       <Tr>
-                        <Th scope="col" rowspan={2} colspan={2}>H-Index</Th>
-                        <Th scope="col" colspan={tableData.headers.length}>Fakultas</Th>
-                        <Th scope="col" rowspan={2}>Jumlah</Th>
+                        <Th scope="col" rowSpan={2} colSpan={2}>H-Index</Th>
+                        <Th scope="col" colSpan={tableData.headers.length}>Fakultas</Th>
+                        <Th scope="col" rowSpan={2}>Jumlah</Th>
                       </Tr>
                       <Tr>
                         {tableData.headers.map(header => (<Th scope="col">{header}</Th>))}
@@ -147,7 +147,7 @@ export default function HIndexPage() {
                       {tableData.rows.map(row => (
                         <>
                           <Tr>
-                            <Th scope="row" rowspan={2} isNumeric={true}>{row.h_index}</Th>
+                            <Th scope="row" rowSpan={2} isNumeric={true}>{row.h_index}</Th>
                             <Th scope="row">Jumlah</Th>
                             {row.columns.map(column => (
                               <>
@@ -170,7 +170,7 @@ export default function HIndexPage() {
                     </Tbody>
                     <Tfoot>
                       <Tr>
-                        <Th scope="col" colspan={2}>Total</Th>
+                        <Th scope="col" colSpan={2}>Total</Th>
                         {tableData.footers.map(footer => (<Td isNumeric={true}>{footer}</Td>))}
                         <Td isNumeric={true}>{tableData.total}</Td>
                       </Tr>

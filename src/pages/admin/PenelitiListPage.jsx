@@ -18,6 +18,7 @@ import {
   HStack,
   Icon,
   IconButton,
+  Link,
   Text
 } from '@chakra-ui/react';
 
@@ -79,7 +80,7 @@ export default function PenelitiListPage() {
             {id: 'h_index', title: 'H-Index', sort: 'peneliti.h_index', render: (value, row) => (
               <HStack>
                 <Text>{row.h_index}</Text>
-                {row.is_remote && (<Icon as={FaLink} color="teal" />)}
+                {row.is_remote && (<Link href={'https://scholar.google.com/citations?hl=en&user=' + encodeURIComponent(row.gscholar_author_id)} isExternal><Icon as={FaLink} color="teal" /></Link>)}
               </HStack>
             )},
             {id: 'diciptakan_oleh_nama', title: 'Diciptakan Oleh', sort: 'DiciptakanOleh.nama'}
